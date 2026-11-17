@@ -43,8 +43,12 @@ SPECS = [
 # Risky tool -> a test the user's own words must pass.
 _LOCK_WORD = re.compile(r"\block\b")
 _DEVICE_WORD = re.compile(r"\b(pc|computer|screen|laptop|workstation|desktop|machine)\b")
+_OPEN_WORD = re.compile(r"\b(open|launch|start|run|pull up|bring up|fire up)\b")
+_APP_WORD = re.compile(r"\b(notepad|calculator|calc|browser|chrome|edge|google|explorer|files?)\b")
 RISKY = {
     "lock_pc": lambda words: bool(_LOCK_WORD.search(words) and _DEVICE_WORD.search(words)),
+    # "let's lock in and study" once made the model open Notepad on its own; an app opens only when asked for.
+    "open_app": lambda words: bool(_OPEN_WORD.search(words) and _APP_WORD.search(words)),
 }
 
 
