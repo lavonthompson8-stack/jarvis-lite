@@ -34,6 +34,8 @@ My own assistant once locked my computer because I said "lock in" (slang for "le
 
 The fix is a second check that doesn't trust the model. Every risky tool has a rule that looks at what the user actually said ("lock" plus a device word like "pc" or "screen"). The model can ask for the tool; the guard decides whether it runs. If it's blocked, the model gets told why and answers normally. `tests/test_guard.py` covers both sides, including the case where the model does call the tool on slang.
 
+Opening apps is guarded the same way. In testing, "ok jarvis let's lock in and study" made the model try to open Notepad on its own, so `open_app` now runs only when the user says something like "open" or "launch" plus an app name.
+
 ## Demo
 
 A real run in safe mode (`JARVIS_DRY_RUN=1`, tools describe what they'd do instead of doing it):
@@ -81,7 +83,7 @@ Settings come from environment variables (see `.env.example`). `JARVIS_PROVIDERS
 python -m pytest
 ```
 
-18 tests: the guard (slang vs. explicit requests, and a model that calls the lock tool anyway), sentence splitting on streamed text, provider fallback, tool calls arriving in pieces over the stream, no model switch after speech has started, and short conversation history.
+22 tests: the guard (slang vs. explicit requests for locking the PC and opening apps, and a model that calls the lock tool anyway), sentence splitting on streamed text, provider fallback, tool calls arriving in pieces over the stream, no model switch after speech has started, and short conversation history.
 
 ## Layout
 
